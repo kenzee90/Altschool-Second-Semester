@@ -1,3 +1,4 @@
+import { Heading } from "@chakra-ui/react";
 import React from "react";
 
 const Error = () => {
@@ -15,9 +16,9 @@ const Error = () => {
         margin: "0 auto",
       }}
     >
-      <h1>
+      <Heading>
         404 <br /> Page Not Found
-      </h1>
+      </Heading>
     </div>
   );
 };

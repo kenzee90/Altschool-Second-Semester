@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { Card, CardHeader, CardBody, CardFooter, Text } from "@chakra-ui/react";
+import { Card, CardHeader, CardBody, CardFooter, Text, Square } from "@chakra-ui/react";
 import { Box, Flex } from "@chakra-ui/react";
 import { Heading } from "@chakra-ui/react";
 import { Input, InputGroup, InputLeftElement } from "@chakra-ui/react";
@@ -23,10 +23,15 @@ function AllRepositoryList() {
   const [page, setPage] = useState(1); // Current page number
   const [perPage, setPerPage] = useState(10); // Repositories per page
   const [totalPages, setTotalPages] = useState(0); // Total number of pages
+  const ref = useRef(null);
   
-  const filteredRepositories = repositories.filter(repo =>
+  let filteredRepositories = repositories.filter(repo =>
     repo.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
+  const PER_PAGE = 6;
+  const total = filteredRepositories?.length;
+  const pages = Math.ceil(total / PER_PAGE);
+  const skip = page * PER_PAGE - PER_PAGE;
   const handlePageClick = (pageNumber) => {
     setPage(pageNumber);
   };
@@ -39,7 +44,11 @@ function AllRepositoryList() {
       setPage(page - 1);
     }
   };
-  
+  function handleSearch(e) {
+    setSearchTerm(e.target.value);
+    filteredRepositories = repositories.filter(repo =>
+      repo.name.toLowerCase().includes(searchTerm.toLowerCase()) );
+  }
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -70,7 +79,7 @@ function AllRepositoryList() {
     };
 
     fetchData();
-  }, [page, perPage, searchTerm]);
+  }, []);
   
   const handleRefresh = () => {
     setError(null);
@@ -79,17 +88,7 @@ function AllRepositoryList() {
   };
 
   
-  const renderPaginationSeries = () => {
-    const pagination = [];
-    for (let i = 1; i <= totalPages; i++) {
-      pagination.push(
-        <button key={i} onClick={() => handlePageClick(i)} className={page === i ? 'active' : ''}>
-          {i}
-        </button>
-      );
-    }
-    return pagination;
-  };
+  
   const renderContent = () => {
     if (loading) {
       return (
@@ -98,9 +97,12 @@ function AllRepositoryList() {
         </Flex>
       );
     }
-    // if(filteredRepositories.length === 0) {
-    //   return window.location.replace("/notfound");
-    // }
+    if(filteredRepositories.length === 0) {
+      setTimeout(() => {
+        return window.location.replace("/notfound");
+      }, 1000);
+      
+    }
 
     if (error) {
       return (
@@ -120,7 +122,7 @@ function AllRepositoryList() {
     }
   
     return (
-      <Flex align="center" justify="center" flexDir={"column"} gap="1rem" bg="gray.100" height={"100%"} >
+      <Flex align="center" justify="center" flexDir={"column"} gap="1rem" bg="gray.100" height={"100%"} width={"100%"} >
         <Heading mt="2rem" color="black">My GitHub Repositories</Heading>
         <Card width={"60%"}>
           <CardBody>
@@ -135,7 +137,7 @@ function AllRepositoryList() {
                   placeholder="Search by repository name"
                   value={searchTerm}
                   onChange={
-                    e => setSearchTerm(e.target.value)}
+                    handleSearch}
                />
               </InputGroup>
               {/* <Button
@@ -149,11 +151,11 @@ function AllRepositoryList() {
             </Flex>
           </CardBody>
         </Card>
-        <ul style={{ listStyle: "none" , padding: '2rem' , display: 'flex', gap: '1rem', flexWrap: 'wrap' }} className="mx-auto">
+        <ul style={{ listStyle: "none" , padding: '2rem' , display: 'flex', gap: '1rem', flexWrap: 'wrap', margin: '2rem auto' }} >
           
-          {filteredRepositories.map((repo) => (
+          {filteredRepositories?.slice(skip, skip + PER_PAGE).map((repo) => (
             <li key={repo.id}>
-              <Card width={"300px"} height="300px" overflow={"hidden"} borderRadius="10px" justify={"center"} align={"center"}>
+              <Card width={"500px"} height="300px" overflow={"hidden"} borderRadius="10px" justify={"center"} align={"center"}>
                 <CardHeader align={"center"} justify={"center"} height={"50%"}>
                   <Link to={`/repos/${repo.name}`}>
                   <Heading>{repo.name}</Heading>
@@ -177,9 +179,37 @@ function AllRepositoryList() {
         </ul>
 
         <Flex align="center" justify="center" gap="1rem" bg="gray.100" height={"100%"} >
-        <Button onClick={handlePrevPage} colorScheme="teal" disabled={page === 1}>Previous</Button>
-        {renderPaginationSeries()}
-        <Button onClick={handleNextPage} colorScheme="teal" disabled={page === totalPages}>Next</Button>
+        <Square>
+        Pages: {page} of {pages}
+        </Square>
+        <Button 
+        disabled={page <= 1}
+        onClick={() => {
+          setPage((prev) => prev - 1);
+          ref.current?.scrollIntoView({ behavior: "smooth" });
+        }}>Prev</Button>
+        <span>
+            {Array.from({ length: pages }, (value, index) => index + 1).map(
+              (repo) => (
+                <Box
+                  key={repo}
+                  onClick={() => {
+                    setPage(repo);
+                    ref.current?.scrollIntoView({ behavior: "smooth" });
+                  }}
+                >
+                  {repo}
+                </Box>
+              )
+            )}
+          </span>
+          <Button 
+       disabled={page >= pages}
+       aria-disabled={page >= pages}
+       onClick={() => {
+         setPage((prev) => prev + 1);
+         ref.current?.scrollIntoView({ behavior: "smooth" });
+       }}>Next</Button>
         </Flex>
       </Flex>
     );
