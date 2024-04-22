@@ -43,7 +43,7 @@ To run the GitHub API Fetch application locally, follow these steps:
    npm start
    ```
 
-5. The application will be running at http://localhost:5174.
+5. The application will be running at http://localhost:5173.
 
 ## Live Demo
 You can access the live demo of the GitHub API Fetch application at [https://altschool-second-semester-five.vercel.app/](https://github.com/kenzee90/Altschool-Second-Semester/).
