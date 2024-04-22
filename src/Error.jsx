@@ -17,12 +17,20 @@ const Error = () => {
         margin: "0 auto",
       }}
     >
-    <Flex flexDirection={"column"} alignItems={"center"} gap={"1rem"}>
-      <Heading>
-        404 <br /> Page Not Found
-      </Heading>
-      <Button colorScheme="white" color="white" onClick={() => window.location.replace("/")} variant={"outline"}> Home </Button>
-    </Flex>
+      <Flex flexDirection={"column"} alignItems={"center"} gap={"1rem"}>
+        <Heading>
+          404 <br /> Page Not Found
+        </Heading>
+        <Button
+          colorScheme="white"
+          color="white"
+          onClick={() => window.location.replace("/")}
+          variant={"outline"}
+        >
+          {" "}
+          Home{" "}
+        </Button>
+      </Flex>
     </div>
   );
 };

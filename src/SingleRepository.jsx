@@ -35,25 +35,33 @@ function SingleRepositoryPage() {
 
     fetchData();
   }, [repoId]);
-  
 
   if (loading) {
     return <div>Loading...</div>;
   }
 
   if (error) {
-    return <Flex align="center" justify="center" flexDir={"column"} gap="1rem" bg="red.100" height={"100vh"}>
-          
-    <Card>
-      <CardHeader>
-        <Heading>Error</Heading>
-      </CardHeader>
-      <CardBody>
-    <Button onClick={handleRefresh} colorScheme="teal">Refresh</Button>
-      </CardBody>
-    </Card>
-   
-  </Flex>;
+    return (
+      <Flex
+        align="center"
+        justify="center"
+        flexDir={"column"}
+        gap="1rem"
+        bg="red.100"
+        height={"100vh"}
+      >
+        <Card>
+          <CardHeader>
+            <Heading>Error</Heading>
+          </CardHeader>
+          <CardBody>
+            <Button onClick={handleRefresh} colorScheme="teal">
+              Refresh
+            </Button>
+          </CardBody>
+        </Card>
+      </Flex>
+    );
   }
 
   return (
@@ -78,8 +86,20 @@ function SingleRepositoryPage() {
           <Text>
             Created at: {new Date(repository.created_at).toLocaleDateString()}
           </Text>
-          <Text>Updated at: {new Date(repository.updated_at).toLocaleDateString()}</Text>
-          <Link to={`/`}><Button colorScheme="teal" width={"100%"} mt={"2rem"} alignSelf={"center"}> Back to Home</Button></Link>
+          <Text>
+            Updated at: {new Date(repository.updated_at).toLocaleDateString()}
+          </Text>
+          <Link to={`/`}>
+            <Button
+              colorScheme="teal"
+              width={"100%"}
+              mt={"2rem"}
+              alignSelf={"center"}
+            >
+              {" "}
+              Back to Home
+            </Button>
+          </Link>
           {/* Display more details as needed */}
         </CardBody>
       </Card>

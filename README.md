@@ -14,6 +14,7 @@ GitHub API fetch is a web application built with React.js that allows users to e
 - Utilization of GitHub API endpoints using Axios
 - Styling with chakra Ul
 - Page routing with React Router DOM
+- SEO Optimization with React Helmet Async
 
 ## Installation
 To run the GitHub API Fetch application locally, follow these steps:

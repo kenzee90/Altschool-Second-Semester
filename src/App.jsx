@@ -11,13 +11,12 @@ import SingleRepository from "./SingleRepository";
 function App() {
   return (
     <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<AllRepositoryList />}></Route>
-            <Route path="/repos/:repoId" element={<SingleRepository />}></Route>
-            <Route path="*" element={<Error />} ></Route>
-          </Routes>
-          </BrowserRouter>
-    
+      <Routes>
+        <Route path="/" element={<AllRepositoryList />}></Route>
+        <Route path="/repos/:repoId" element={<SingleRepository />}></Route>
+        <Route path="*" element={<Error />}></Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
